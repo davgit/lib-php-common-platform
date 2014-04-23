@@ -94,13 +94,13 @@ class SwaggerManager extends BasePlatformRestService
     /**
      * @var array The default cube structure
      */
-    protected static $_cubeDefaults = array('triggers' => array(),);
+    protected static $_cubeDefaults = array( 'triggers' => array(), );
     /**
      * @var array The core DSP services that are built-in
      */
     protected static $_builtInServices = array(
-        array('api_name' => 'user', 'type_id' => 0, 'description' => 'User Login'),
-        array('api_name' => 'system', 'type_id' => 0, 'description' => 'System Configuration')
+        array( 'api_name' => 'user', 'type_id' => 0, 'description' => 'User Login' ),
+        array( 'api_name' => 'system', 'type_id' => 0, 'description' => 'System Configuration' )
     );
 
     //*************************************************************************
@@ -141,7 +141,7 @@ SELECT
 	storage_type_id,
 	description
 FROM
-    df_sys_service	
+    df_sys_service
 ORDER BY
 	api_name ASC
 MYSQL;
@@ -317,7 +317,7 @@ MYSQL;
         /** @noinspection PhpIncludeInspection */
         $_resourceListing = require( $_main );
 
-        $_out = array_merge( $_resourceListing, array('apis' => $_serviceApis) );
+        $_out = array_merge( $_resourceListing, array( 'apis' => $_serviceApis ) );
         $_filePath = $_cachePath . static::SWAGGER_CACHE_FILE;
 
         if ( false === file_put_contents( $_filePath, json_encode( $_out, JSON_UNESCAPED_SLASHES ) ) )
@@ -373,8 +373,8 @@ MYSQL;
             $_scripts = $_events = array();
 
             $_path = str_replace(
-                array('{api_name}', '/'),
-                array($apiName, '.'),
+                array( '{api_name}', '/' ),
+                array( $apiName, '.' ),
                 trim( Option::get( $_api, 'path' ), '/' )
             );
 
@@ -393,8 +393,8 @@ MYSQL;
                         $_scripts += static::_findScripts( $_path, $_method, $_eventName );
 
                         $_eventsThrown[] = str_ireplace(
-                            array('{api_name}', '{action}', '{request.method}'),
-                            array($apiName, $_method, $_method),
+                            array( '{api_name}', '{action}', '{request.method}' ),
+                            array( $apiName, $_method, $_method ),
                             $_eventName
                         );
                     }
@@ -473,7 +473,7 @@ MYSQL;
         }
 
         $_response = array();
-        $_eventPattern = '/^' . str_replace( array('.*.js', '.'), array(null, '\\.'), $_scriptPattern ) . '\\.(\w)\\.js$/i';
+        $_eventPattern = '/^' . str_replace( array( '.*.js', '.' ), array( null, '\\.' ), $_scriptPattern ) . '\\.(\w)\\.js$/i';
 
         foreach ( $_scripts as $_script )
         {
@@ -538,7 +538,7 @@ MYSQL;
             $_resource = $service->getApiName();
         }
 
-        $_resourceMacros = array('{table_name}', '{container}', '{folder_path}', '{file_path}');
+        $_resourceMacros = array( '{table_name}', '{container}', '{folder_path}', '{file_path}' );
 
         if ( null === ( $_resources = Option::get( $_map, $_resource ) ) )
         {
@@ -709,7 +709,7 @@ MYSQL;
 
         if ( file_exists( $_swaggerPath ) )
         {
-            $files = array_diff( scandir( $_swaggerPath ), array('.', '..') );
+            $files = array_diff( scandir( $_swaggerPath ), array( '.', '..' ) );
             foreach ( $files as $file )
             {
                 @unlink( $_swaggerPath . '/' . $file );
