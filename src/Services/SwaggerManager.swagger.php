@@ -27,7 +27,7 @@ HTML;
 return array(
     'swaggerVersion' => SwaggerManager::SWAGGER_VERSION,
     'apiVersion'     => API_VERSION,
-    'authorizations' => array( 'apiKey' => array( 'type' => 'apiKey', 'passAs' => 'header' ) ),
+    'authorizations' => array('apiKey' => array('type' => 'apiKey', 'passAs' => 'header')),
     'info'           => array(
         'title'       => 'DreamFactory Live API Documentation',
         'description' => $_description,

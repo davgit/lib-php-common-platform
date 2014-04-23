@@ -18,6 +18,8 @@
  * limitations under the License.
  */
 
+use DreamFactory\Platform\Services\SwaggerManager;
+
 $_base = require( __DIR__ . '/BasePlatformRestSvc.swagger.php' );
 
 $_base['apis'] = array(
@@ -57,24 +59,7 @@ $_base['apis'] = array(
                         'required'      => false,
                     ),
                 ),
-                'responseMessages' => array(
-                    array(
-                        'message' => 'Bad Request - Request is not complete or valid.',
-                        'code'    => 400,
-                    ),
-                    array(
-                        'message' => 'Unauthorized Access - No currently valid session available.',
-                        'code'    => 401,
-                    ),
-                    array(
-                        'message' => 'Not Found - Email template or system resource not found.',
-                        'code'    => 404,
-                    ),
-                    array(
-                        'message' => 'System Error - Specific reason is included in the error message.',
-                        'code'    => 500,
-                    ),
-                ),
+                'responseMessages' => SwaggerManager::getCommonResponses(),
                 'notes'            =>
                     'If a template is not used with all required fields, then they must be included in the request. ' .
                     'If the \'from\' address is not provisioned in the service, then it must be included in the request.',

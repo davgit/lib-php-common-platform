@@ -18,7 +18,10 @@
  * limitations under the License.
  */
 
+use DreamFactory\Platform\Services\SwaggerManager;
+
 $_base = require( __DIR__ . '/BasePlatformRestSvc.swagger.php' );
+$_commonResponses = SwaggerManager::getCommonResponses( array(400, 401, 500) );
 
 $_base['apis'] = array(
     array(
@@ -26,19 +29,20 @@ $_base['apis'] = array(
         'description' => 'Operations available for SQL DB Schemas.',
         'operations'  => array(
             array(
-                'method'     => 'GET',
-                'summary'    => 'getResources() - List resources available for database schema.',
-                'nickname'   => 'getResources',
-                'type'       => 'Resources',
-                'event_name' => 'tables.list',
-                'notes'      => 'See listed operations for each resource available.',
+                'method'           => 'GET',
+                'summary'          => 'getResources() - List resources available for database schema.',
+                'nickname'         => 'getResources',
+                'type'             => 'Resources',
+                'event_name'       => '{api_name}.list',
+                'responseMessages' => $_commonResponses,
+                'notes'            => 'See listed operations for each resource available.',
             ),
             array(
                 'method'           => 'POST',
                 'summary'          => 'createTables() - Create one or more tables.',
                 'nickname'         => 'createTables',
                 'type'             => 'Resources',
-                'event_name'       => 'tables.create',
+                'event_name'       => '{api_name}.create',
                 'parameters'       => array(
                     array(
                         'name'          => 'tables',
@@ -49,29 +53,16 @@ $_base['apis'] = array(
                         'required'      => true,
                     ),
                 ),
-                'responseMessages' => array(
-                    array(
-                        'message' => 'Bad Request - Request does not have a valid format, all required parameters, etc.',
-                        'code'    => 400,
-                    ),
-                    array(
-                        'message' => 'Unauthorized Access - No currently valid session available.',
-                        'code'    => 401,
-                    ),
-                    array(
-                        'message' => 'System Error - Specific reason is included in the error message.',
-                        'code'    => 500,
-                    ),
-                ),
+                'responseMessages' => $_commonResponses,
                 'notes'            => 'Post data should be a single table definition or an array of table definitions.',
             ),
             array(
-                'method'     => 'PUT',
-                'summary'    => 'updateTables() - Update one or more tables.',
-                'nickname'   => 'updateTables',
-                'event_name' => 'tables.update',
-                'type'       => 'Resources',
-                'parameters' => array(
+                'method'           => 'PUT',
+                'summary'          => 'updateTables() - Update one or more tables.',
+                'nickname'         => 'updateTables',
+                'event_name'       => '{api_name}.alter',
+                'type'             => 'Resources',
+                'parameters'       => array(
                     array(
                         array(
                             'name'          => 'tables',
@@ -82,22 +73,9 @@ $_base['apis'] = array(
                             'required'      => true,
                         ),
                     ),
-                    'responseMessages' => array(
-                        array(
-                            'message' => 'Bad Request - Request does not have a valid format, all required parameters, etc.',
-                            'code'    => 400,
-                        ),
-                        array(
-                            'message' => 'Unauthorized Access - No currently valid session available.',
-                            'code'    => 401,
-                        ),
-                        array(
-                            'message' => 'System Error - Specific reason is included in the error message.',
-                            'code'    => 500,
-                        ),
-                    ),
-                    'notes'            => 'Post data should be a single table definition or an array of table definitions.',
                 ),
+                'responseMessages' => $_commonResponses,
+                'notes'            => 'Post data should be a single table definition or an array of table definitions.',
             ),
         ),
     ),
@@ -109,7 +87,7 @@ $_base['apis'] = array(
                 'method'           => 'GET',
                 'summary'          => 'describeTable() - Retrieve table definition for the given table.',
                 'nickname'         => 'describeTable',
-                'event_name'       => 'table.describe',
+                'event_name'       => array('{api_name}.{table_name}.describe', '{api_name}.table_described'),
                 'type'             => 'TableSchema',
                 'parameters'       => array(
                     array(
@@ -121,20 +99,7 @@ $_base['apis'] = array(
                         'required'      => true,
                     ),
                 ),
-                'responseMessages' => array(
-                    array(
-                        'message' => 'Bad Request - Request does not have a valid format, all required parameters, etc.',
-                        'code'    => 400,
-                    ),
-                    array(
-                        'message' => 'Unauthorized Access - No currently valid session available.',
-                        'code'    => 401,
-                    ),
-                    array(
-                        'message' => 'System Error - Specific reason is included in the error message.',
-                        'code'    => 500,
-                    ),
-                ),
+                'responseMessages' => $_commonResponses,
                 'notes'            => 'This describes the table, its fields and relations to other tables.',
             ),
             array(
@@ -142,7 +107,7 @@ $_base['apis'] = array(
                 'summary'          => 'createFields() - Create one or more fields in the given table.',
                 'nickname'         => 'createFields',
                 'type'             => 'Success',
-                'event_name'       => 'table.fields.create',
+                'event_name'       => array('{api_name}.{table_name}.fields.create', '{api_name}.tables.fields_created'),
                 'parameters'       => array(
                     array(
                         'name'          => 'table_name',
@@ -161,20 +126,7 @@ $_base['apis'] = array(
                         'required'      => true,
                     ),
                 ),
-                'responseMessages' => array(
-                    array(
-                        'message' => 'Bad Request - Request does not have a valid format, all required parameters, etc.',
-                        'code'    => 400,
-                    ),
-                    array(
-                        'message' => 'Unauthorized Access - No currently valid session available.',
-                        'code'    => 401,
-                    ),
-                    array(
-                        'message' => 'System Error - Specific reason is included in the error message.',
-                        'code'    => 500,
-                    ),
-                ),
+                'responseMessages' => $_commonResponses,
                 'notes'            => 'Post data should be an array of field properties for a single record or an array of fields.',
             ),
             array(
@@ -182,7 +134,7 @@ $_base['apis'] = array(
                 'summary'          => 'updateFields() - Update one or more fields in the given table.',
                 'nickname'         => 'updateFields',
                 'type'             => 'Success',
-                'event_name'       => 'table.fields.update',
+                'event_name'       => array('{api_name}.{table_name}.fields.alter', '{api_name}.tables.fields_altered'),
                 'parameters'       => array(
                     array(
                         'name'          => 'table_name',
@@ -201,20 +153,7 @@ $_base['apis'] = array(
                         'required'      => true,
                     ),
                 ),
-                'responseMessages' => array(
-                    array(
-                        'message' => 'Bad Request - Request does not have a valid format, all required parameters, etc.',
-                        'code'    => 400,
-                    ),
-                    array(
-                        'message' => 'Unauthorized Access - No currently valid session available.',
-                        'code'    => 401,
-                    ),
-                    array(
-                        'message' => 'System Error - Specific reason is included in the error message.',
-                        'code'    => 500,
-                    ),
-                ),
+                'responseMessages' => $_commonResponses,
                 'notes'            => 'Post data should be an array of field properties for a single record or an array of fields.',
             ),
             array(
@@ -222,7 +161,7 @@ $_base['apis'] = array(
                 'summary'          => 'deleteTable() - Delete (aka drop) the given table.',
                 'nickname'         => 'deleteTable',
                 'type'             => 'Success',
-                'event_name'       => 'table.fields.delete',
+                'event_name'       => array('{api_name}.{table_name}.drop', '{api_name}.table_dropped'),
                 'parameters'       => array(
                     array(
                         'name'          => 'table_name',
@@ -233,20 +172,7 @@ $_base['apis'] = array(
                         'required'      => true,
                     ),
                 ),
-                'responseMessages' => array(
-                    array(
-                        'message' => 'Bad Request - Request does not have a valid format, all required parameters, etc.',
-                        'code'    => 400,
-                    ),
-                    array(
-                        'message' => 'Unauthorized Access - No currently valid session available.',
-                        'code'    => 401,
-                    ),
-                    array(
-                        'message' => 'System Error - Specific reason is included in the error message.',
-                        'code'    => 500,
-                    ),
-                ),
+                'responseMessages' => $_commonResponses,
                 'notes'            => 'Careful, this drops the database table and all of its contents.',
             ),
         ),
@@ -260,7 +186,7 @@ $_base['apis'] = array(
                 'summary'          => 'describeField() - Retrieve the definition of the given field for the given table.',
                 'nickname'         => 'describeField',
                 'type'             => 'FieldSchema',
-                'event_name'       => 'table.field.describe',
+                'event_name'       => array('{api_name}.{table_name}.{field_name}.describe', '{api_name}.{table_name}.field_described'),
                 'parameters'       => array(
                     array(
                         'name'          => 'table_name',
@@ -279,20 +205,7 @@ $_base['apis'] = array(
                         'required'      => true,
                     ),
                 ),
-                'responseMessages' => array(
-                    array(
-                        'message' => 'Bad Request - Request does not have a valid format, all required parameters, etc.',
-                        'code'    => 400,
-                    ),
-                    array(
-                        'message' => 'Unauthorized Access - No currently valid session available.',
-                        'code'    => 401,
-                    ),
-                    array(
-                        'message' => 'System Error - Specific reason is included in the error message.',
-                        'code'    => 500,
-                    ),
-                ),
+                'responseMessages' => $_commonResponses,
                 'notes'            => 'This describes the field and its properties.',
             ),
             array(
@@ -300,7 +213,7 @@ $_base['apis'] = array(
                 'summary'          => 'updateField() - Update one record by identifier.',
                 'nickname'         => 'updateField',
                 'type'             => 'Success',
-                'event_name'       => 'table.field.update',
+                'event_name'       => array('{api_name}.{table_name}.{field_name}.alter', '{api_name}.{table_name}.field_altered'),
                 'parameters'       => array(
                     array(
                         'name'          => 'table_name',
@@ -327,20 +240,7 @@ $_base['apis'] = array(
                         'required'      => true,
                     ),
                 ),
-                'responseMessages' => array(
-                    array(
-                        'message' => 'Bad Request - Request does not have a valid format, all required parameters, etc.',
-                        'code'    => 400,
-                    ),
-                    array(
-                        'message' => 'Unauthorized Access - No currently valid session available.',
-                        'code'    => 401,
-                    ),
-                    array(
-                        'message' => 'System Error - Specific reason is included in the error message.',
-                        'code'    => 500,
-                    ),
-                ),
+                'responseMessages' => $_commonResponses,
                 'notes'            => 'Post data should be an array of field properties for the given field.',
             ),
             array(
@@ -348,7 +248,7 @@ $_base['apis'] = array(
                 'summary'          => 'deleteField() - Remove the given field from the given table.',
                 'nickname'         => 'deleteField',
                 'type'             => 'Success',
-                'event_name'       => 'table.field.delete',
+                'event_name'       => array('{api_name}.{table_name}.{field_name}.drop', '{api_name}.{table_name}.field_dropped'),
                 'parameters'       => array(
                     array(
                         'name'          => 'table_name',
@@ -367,20 +267,7 @@ $_base['apis'] = array(
                         'required'      => true,
                     ),
                 ),
-                'responseMessages' => array(
-                    array(
-                        'message' => 'Bad Request - Request does not have a valid format, all required parameters, etc.',
-                        'code'    => 400,
-                    ),
-                    array(
-                        'message' => 'Unauthorized Access - No currently valid session available.',
-                        'code'    => 401,
-                    ),
-                    array(
-                        'message' => 'System Error - Specific reason is included in the error message.',
-                        'code'    => 500,
-                    ),
-                ),
+                'responseMessages' => $_commonResponses,
                 'notes'            => 'Careful, this drops the database table field/column and all of its contents.',
             ),
         ),
@@ -573,5 +460,7 @@ $_models = array(
 );
 
 $_base['models'] = array_merge( $_base['models'], $_models );
+
+unset( $_commonResponses, $_models );
 
 return $_base;

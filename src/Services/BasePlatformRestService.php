@@ -266,6 +266,12 @@ abstract class BasePlatformRestService extends BasePlatformService implements Re
      */
     protected function _handleResource()
     {
+        //	Now all actions must be HTTP verbs
+        if ( !HttpMethod::contains( $this->_action ) )
+        {
+            throw new BadRequestException( 'The action "' . $this->_action . '" is not supported.' );
+        }
+
         //	Allow verb sub-actions
         try
         {
@@ -277,12 +283,6 @@ abstract class BasePlatformRestService extends BasePlatformService implements Re
         catch ( NoExtraActionsException $_ex )
         {
             //	Safely ignored
-        }
-
-        //	Now all actions must be HTTP verbs
-        if ( !HttpMethod::contains( $this->_action ) )
-        {
-            throw new BadRequestException( 'The action "' . $this->_action . '" is not supported.' );
         }
 
         $_methodToCall = false;
@@ -419,12 +419,10 @@ abstract class BasePlatformRestService extends BasePlatformService implements Re
             $_result = DataFormat::reformatData( $_result, $this->_nativeFormat, $this->_outputFormat );
         }
 
-        /**
-         * @todo This needs to move to the resource class but
-         */
+        //	Fire the after_data_format event
         if ( $this instanceof BasePlatformRestResource )
         {
-            $this->trigger( ResourceServiceEvents::AFTER_DATA_FORMAT, $_result );
+            $this->_triggerActionEvent( $_result, ResourceServiceEvents::AFTER_DATA_FORMAT );
         }
 
         if ( !empty( $this->_outputFormat ) )
@@ -646,13 +644,14 @@ abstract class BasePlatformRestService extends BasePlatformService implements Re
      *
      * These events will only trigger a single time per request.
      *
-     * @param mixed            $result    The result of the call
-     * @param string           $eventName The event to trigger. If not supplied, one will looked up based on the context
+     * @param mixed            $result       The result of the call
+     * @param string           $eventName    The event to trigger. If not supplied, one will looked up based on the context
      * @param RestServiceEvent $event
+     * @param array            $replacements An array of replacement keys and values
      *
      * @return bool
      */
-    protected function _triggerActionEvent( &$result, $eventName = null, $event = null )
+    protected function _triggerActionEvent( &$result, $eventName = null, $event = null, array $replacements = array() )
     {
         static $_triggeredEvents = array();
 
@@ -668,6 +667,11 @@ abstract class BasePlatformRestService extends BasePlatformService implements Re
             if ( empty( $_eventName ) || isset( $_triggeredEvents[ $_eventName ] ) )
             {
                 continue;
+            }
+
+            if ( !empty( $replacements ) )
+            {
+                $_eventName = str_ireplace( array_keys( $replacements ), array_values( $replacements ), $_eventName );
             }
 
             //  Construct an event if necessary
@@ -1050,4 +1054,5 @@ abstract class BasePlatformRestService extends BasePlatformService implements Re
     {
         return $this->_outputAsFile;
     }
+
 }

@@ -33,9 +33,13 @@ class PlatformStore extends Flexistore
     //*************************************************************************
 
     /**
-     * @type string
+     * @type string The namespace of our store
      */
-    const DEFAULT_NAMESPACE = 'df.platform';
+    const DEFAULT_NAMESPACE = 'DreamFactory.Platform';
+    /**
+     * @type string The default extension for the cache files
+     */
+    const DEFAULT_EXTENSION = '.dfcc.php';
     /**
      * @type string
      */
@@ -57,7 +61,7 @@ class PlatformStore extends Flexistore
             $type,
             array(
                 'namespace' => static::DEFAULT_NAMESPACE,
-                'arguments' => array( Platform::getPrivatePath( static::STORE_CACHE_PATH ), '.dfcc.php' )
+                'arguments' => array(Platform::getPrivatePath( static::STORE_CACHE_PATH ), static::DEFAULT_EXTENSION)
             ),
             false
         );

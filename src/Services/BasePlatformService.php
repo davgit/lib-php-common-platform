@@ -197,16 +197,17 @@ abstract class BasePlatformService extends Seed implements PlatformServiceLike, 
         }
     }
 
-    /**
-     * @param string $request
-     * @param string $component
-     *
-     * @throws NotImplementedException
-     */
-    protected function _checkPermission( $request, $component )
-    {
-        throw new NotImplementedException();
-    }
+//@todo remove ununsed function
+//    /**
+//     * @param string $request
+//     * @param string $component
+//     *
+//     * @throws NotImplementedException
+//     */
+//    protected function _checkPermission( $request, $component )
+//    {
+//        throw new NotImplementedException();
+//    }
 
     /**
      * @param string $apiName

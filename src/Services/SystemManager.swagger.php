@@ -61,7 +61,7 @@ $_base['models'] = array(
 );
 
 //  Load resources
-$_namespaces = array( 'DreamFactory\\Platform\\Resources\\System' ); //Pii::app()->getResourceNamespaces();
+$_namespaces = array('DreamFactory\\Platform\\Resources\\System'); //Pii::app()->getResourceNamespaces();
 Log::debug( '  * Discovering resources' );
 
 foreach ( $_namespaces as $_namespace )

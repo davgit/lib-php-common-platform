@@ -21,6 +21,7 @@
 use DreamFactory\Platform\Services\SwaggerManager;
 
 $_base = require( __DIR__ . '/BasePlatformRestSvc.swagger.php' );
+$_commonResponses = SwaggerManager::getCommonResponses();
 
 $_base['apis'] = array(
     array(
@@ -32,12 +33,12 @@ $_base['apis'] = array(
                 'nickname'         => 'getResources',
                 'type'             => 'Resources',
                 'event_name'       => '{api_name}.list',
-                'responseMessages' => SwaggerManager::getCommonResponses( array( 400, 401, 500 ) ),
+                'responseMessages' => SwaggerManager::getCommonResponses( array(400, 401, 500) ),
                 'notes'            => 'List the names of the available containers in this storage. ',
             ),
             array(
                 'method'           => 'GET',
-                'summary'          => 'getContainers() - List all containers with properties.',
+                'summary'          => 'getContainers() - List all containers, optionally with properties.',
                 'nickname'         => 'getContainers',
                 'type'             => 'ContainersResponse',
                 'event_name'       => '{api_name}.describe',
@@ -52,7 +53,7 @@ $_base['apis'] = array(
                         'defaultValue'  => true,
                     ),
                 ),
-                'responseMessages' => SwaggerManager::getCommonResponses( array( 400, 401, 500 ) ),
+                'responseMessages' => SwaggerManager::getCommonResponses( array(400, 401, 500) ),
                 'notes'            => 'List the names and any properties of the available containers in this storage.',
             ),
             array(
@@ -82,14 +83,14 @@ $_base['apis'] = array(
                     array(
                         'name'          => 'X-HTTP-METHOD',
                         'description'   => 'Override request using POST to tunnel other http request, such as DELETE.',
-                        'enum'          => array( 'GET', 'PUT', 'PATCH', 'DELETE' ),
+                        'enum'          => array('GET', 'PUT', 'PATCH', 'DELETE'),
                         'allowMultiple' => false,
                         'type'          => 'string',
                         'paramType'     => 'header',
                         'required'      => false,
                     ),
                 ),
-                'responseMessages' => SwaggerManager::getCommonResponses( array( 400, 401, 500 ) ),
+                'responseMessages' => SwaggerManager::getCommonResponses( array(400, 401, 500) ),
                 'notes'            =>
                     'Post data should be a single container definition or an array of container definitions. ' .
                     'Alternatively, override the HTTP Method to pass containers to other actions.',
@@ -119,7 +120,7 @@ $_base['apis'] = array(
                         'default'       => false,
                     ),
                 ),
-                'responseMessages' => SwaggerManager::getCommonResponses( array( 400, 401, 500 ) ),
+                'responseMessages' => SwaggerManager::getCommonResponses( array(400, 401, 500) ),
                 'notes'            =>
                     'Pass a comma-delimited list of container names to delete. ' .
                     'Set \'force\' to true to delete all containers. ' .
@@ -193,7 +194,7 @@ $_base['apis'] = array(
                         'defaultValue'  => false,
                     ),
                 ),
-                'responseMessages' => SwaggerManager::getCommonResponses(),
+                'responseMessages' => $_commonResponses,
                 'notes'            =>
                     'Use \'include_properties\' to get properties of the container. ' .
                     'Use the \'include_folders\' and/or \'include_files\' to modify the listing.',
@@ -203,7 +204,7 @@ $_base['apis'] = array(
                 'summary'          => 'createContainer() - Create container and/or add content.',
                 'nickname'         => 'createContainer',
                 'type'             => 'ContainerResponse',
-                'event_name'       => array( '{api_name}.{container}.insert', '{api_name}.new_container', ),
+                'event_name'       => array('{api_name}.{container}.insert', '{api_name}.container_created',),
                 'parameters'       => array(
                     array(
                         'name'          => 'container',
@@ -259,14 +260,14 @@ $_base['apis'] = array(
                     array(
                         'name'          => 'X-HTTP-METHOD',
                         'description'   => 'Override request using POST to tunnel other http request, such as DELETE.',
-                        'enum'          => array( 'GET', 'PUT', 'PATCH', 'DELETE' ),
+                        'enum'          => array('GET', 'PUT', 'PATCH', 'DELETE'),
                         'allowMultiple' => false,
                         'type'          => 'string',
                         'paramType'     => 'header',
                         'required'      => false,
                     ),
                 ),
-                'responseMessages' => SwaggerManager::getCommonResponses(),
+                'responseMessages' => $_commonResponses,
                 'notes'            => 'Post data as an array of folders and/or files.',
             ),
             array(
@@ -274,7 +275,7 @@ $_base['apis'] = array(
                 'summary'          => 'updateContainerProperties() - Update properties of the container.',
                 'nickname'         => 'updateContainerProperties',
                 'type'             => 'Container',
-                'event_name'       => array( '{api_name}.{container}.update', '{api_name}.container_updated' ),
+                'event_name'       => array('{api_name}.{container}.update', '{api_name}.container_updated'),
                 'parameters'       => array(
                     array(
                         'name'          => 'container',
@@ -293,7 +294,7 @@ $_base['apis'] = array(
                         'required'      => true,
                     ),
                 ),
-                'responseMessages' => SwaggerManager::getCommonResponses(),
+                'responseMessages' => $_commonResponses,
                 'notes'            => 'Post data as an array of container properties.',
             ),
             array(
@@ -301,7 +302,7 @@ $_base['apis'] = array(
                 'summary'          => 'deleteContainer() - Delete one container and/or its contents.',
                 'nickname'         => 'deleteContainer',
                 'type'             => 'ContainerResponse',
-                'event_name'       => array( '{api_name}.{container}.delete', '{api_name}.container_deleted' ),
+                'event_name'       => array('{api_name}.{container}.delete', '{api_name}.container_deleted'),
                 'parameters'       => array(
                     array(
                         'name'          => 'container',
@@ -328,7 +329,7 @@ $_base['apis'] = array(
                         'required'      => false,
                     ),
                 ),
-                'responseMessages' => SwaggerManager::getCommonResponses(),
+                'responseMessages' => $_commonResponses,
                 'notes'            =>
                     'Set \'content_only\' to true to delete the folders and files contained, but not the container. ' .
                     'Set \'force\' to true to delete a non-empty container. ' .
@@ -410,7 +411,7 @@ $_base['apis'] = array(
                         'defaultValue'  => false,
                     ),
                 ),
-                'responseMessages' => SwaggerManager::getCommonResponses(),
+                'responseMessages' => $_commonResponses,
                 'notes'            =>
                     'Use \'include_properties\' to get properties of the folder. ' .
                     'Use the \'include_folders\' and/or \'include_files\' to modify the listing.',
@@ -420,7 +421,7 @@ $_base['apis'] = array(
                 'summary'          => 'createFolder() - Create a folder and/or add content.',
                 'nickname'         => 'createFolder',
                 'type'             => 'FolderResponse',
-                'event_name'       => array( '{api_name}.{container}.{folder_path}.insert', '{api_name}.{container}.new_folder' ),
+                'event_name'       => array('{api_name}.{container}.{folder_path}.insert', '{api_name}.{container}.folder_created'),
                 'parameters'       => array(
                     array(
                         'name'          => 'container',
@@ -484,14 +485,14 @@ $_base['apis'] = array(
                     array(
                         'name'          => 'X-HTTP-METHOD',
                         'description'   => 'Override request using POST to tunnel other http request, such as DELETE.',
-                        'enum'          => array( 'GET', 'PUT', 'PATCH', 'DELETE' ),
+                        'enum'          => array('GET', 'PUT', 'PATCH', 'DELETE'),
                         'allowMultiple' => false,
                         'type'          => 'string',
                         'paramType'     => 'header',
                         'required'      => false,
                     ),
                 ),
-                'responseMessages' => SwaggerManager::getCommonResponses(),
+                'responseMessages' => $_commonResponses,
                 'notes'            => 'Post data as an array of folders and/or files. Folders are created if they do not exist',
             ),
             array(
@@ -499,7 +500,7 @@ $_base['apis'] = array(
                 'summary'          => 'updateFolderProperties() - Update folder properties.',
                 'nickname'         => 'updateFolderProperties',
                 'type'             => 'Folder',
-                'event_name'       => array( '{api_name}.{container}.{folder_path}.update', '{api_name}.{container}.folder_updated' ),
+                'event_name'       => array('{api_name}.{container}.{folder_path}.update', '{api_name}.{container}.folder_updated'),
                 'parameters'       => array(
                     array(
                         'name'          => 'container',
@@ -526,7 +527,7 @@ $_base['apis'] = array(
                         'required'      => false,
                     ),
                 ),
-                'responseMessages' => SwaggerManager::getCommonResponses(),
+                'responseMessages' => $_commonResponses,
                 'notes'            => 'Post body as an array of folder properties.',
             ),
             array(
@@ -534,7 +535,7 @@ $_base['apis'] = array(
                 'summary'          => 'deleteFolder() - Delete one folder and/or its contents.',
                 'nickname'         => 'deleteFolder',
                 'type'             => 'FolderResponse',
-                'event_name'       => array( '{api_name}.{container}.{folder_path}.delete', '{api_name}.{container}.folder_deleted', ),
+                'event_name'       => array('{api_name}.{container}.{folder_path}.delete', '{api_name}.{container}.folder_deleted',),
                 'parameters'       => array(
                     array(
                         'name'          => 'container',
@@ -569,7 +570,7 @@ $_base['apis'] = array(
                         'required'      => false,
                     ),
                 ),
-                'responseMessages' => SwaggerManager::getCommonResponses(),
+                'responseMessages' => $_commonResponses,
                 'notes'            =>
                     'Set \'content_only\' to true to delete the sub-folders and files contained, but not the folder. ' .
                     'Set \'force\' to true to delete a non-empty folder. ' .
@@ -587,7 +588,7 @@ $_base['apis'] = array(
                 'summary'          => 'getFile() - Download the file contents and/or its properties.',
                 'nickname'         => 'getFile',
                 'type'             => 'FileResponse',
-                'event_name'       => array( '{api_name}.{container}.{file_path}.read', '{api_name}.{container}.file_read' ),
+                'event_name'       => array('{api_name}.{container}.{file_path}.download', '{api_name}.{container}.file_downloaded'),
                 'parameters'       => array(
                     array(
                         'name'          => 'container',
@@ -633,7 +634,7 @@ $_base['apis'] = array(
                         'defaultValue'  => false,
                     ),
                 ),
-                'responseMessages' => SwaggerManager::getCommonResponses(),
+                'responseMessages' => $_commonResponses,
                 'notes'            =>
                     'By default, the file is streamed to the browser. ' .
                     'Use the \'download\' parameter to prompt for download. ' .
@@ -644,7 +645,7 @@ $_base['apis'] = array(
                 'summary'          => 'createFile() - Create a new file.',
                 'nickname'         => 'createFile',
                 'type'             => 'FileResponse',
-                'event_name'       => array( '{api_name}.{container}.{file_path}.create', '{api_name}.{container}.file_created' ),
+                'event_name'       => array('{api_name}.{container}.{file_path}.create', '{api_name}.{container}.file_created'),
                 'parameters'       => array(
                     array(
                         'name'          => 'container',
@@ -679,7 +680,7 @@ $_base['apis'] = array(
                         'required'      => false,
                     ),
                 ),
-                'responseMessages' => SwaggerManager::getCommonResponses(),
+                'responseMessages' => $_commonResponses,
                 'notes'            => 'Post body should be the contents of the file or an object with file properties.',
             ),
             array(
@@ -687,7 +688,7 @@ $_base['apis'] = array(
                 'summary'          => 'replaceFile() - Update content of the file.',
                 'nickname'         => 'replaceFile',
                 'type'             => 'FileResponse',
-                'event_name'       => array( '{api_name}.{container}.{file_path}.update', '{api_name}.{container}.file_updated' ),
+                'event_name'       => array('{api_name}.{container}.{file_path}.update', '{api_name}.{container}.file_updated'),
                 'parameters'       => array(
                     array(
                         'name'          => 'container',
@@ -714,7 +715,7 @@ $_base['apis'] = array(
                         'required'      => false,
                     ),
                 ),
-                'responseMessages' => SwaggerManager::getCommonResponses(),
+                'responseMessages' => $_commonResponses,
                 'notes'            => 'Post body should be the contents of the file.',
             ),
             array(
@@ -722,7 +723,7 @@ $_base['apis'] = array(
                 'summary'          => 'updateFileProperties() - Update properties of the file.',
                 'nickname'         => 'updateFileProperties',
                 'type'             => 'File',
-                'event_name'       => array( '{api_name}.{container}.{file_path}.properties_updated', '{api_name}.{container}.file_properties_updated' ),
+                'event_name'       => array('{api_name}.{container}.{file_path}.update', '{api_name}.{container}.file_updated'),
                 'parameters'       => array(
                     array(
                         'name'          => 'container',
@@ -749,7 +750,7 @@ $_base['apis'] = array(
                         'required'      => false,
                     ),
                 ),
-                'responseMessages' => SwaggerManager::getCommonResponses(),
+                'responseMessages' => $_commonResponses,
                 'notes'            => 'Post body should be an array of file properties.',
             ),
             array(
@@ -757,7 +758,7 @@ $_base['apis'] = array(
                 'summary'          => 'deleteFile() - Delete one file.',
                 'nickname'         => 'deleteFile',
                 'type'             => 'FileResponse',
-                'event_name'       => array( '{api_name}.{container}.{file_path}.delete', '{api_name}.{container}.file_deleted' ),
+                'event_name'       => array('{api_name}.{container}.{file_path}.delete', '{api_name}.{container}.file_deleted'),
                 'parameters'       => array(
                     array(
                         'name'          => 'container',
@@ -776,7 +777,7 @@ $_base['apis'] = array(
                         'required'      => true,
                     ),
                 ),
-                'responseMessages' => SwaggerManager::getCommonResponses(),
+                'responseMessages' => $_commonResponses,
                 'notes'            => 'Careful, this removes the given file from the storage.',
             ),
         ),
@@ -998,5 +999,7 @@ $_models = array(
 );
 
 $_base['models'] = array_merge( $_base['models'], $_models );
+
+unset( $_commonResponses, $_models, $_commonContainer, $_commonFolder, $_commonFile );
 
 return $_base;
